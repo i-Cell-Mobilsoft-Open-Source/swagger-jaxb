@@ -1,0 +1,15 @@
+= swagger-jaxb
+
+Eredetileg `be.redlab.jaxb:swagger-jaxb` volt,
+viszont a github alapján az eredti plugin két éve nem frissült.
+
+Eredeti github projekt: https://github.com/redlab/swagger-jaxb
+
+A bővítéshez az alábbi fork-ot vettük alapul:
+https://github.com/peneksglazami/swagger-jaxb
+
+== Összefoglalás
+A fork-hoz képest csak refaktorálásra került a kód, hogy egyszerűbben kiterjeszthető és a generált annotációk valamint az annotálás helye könnyen felülírható legyen.
+
+== Eredeti README
+include::README-original.adoc[leveloffset=2]
