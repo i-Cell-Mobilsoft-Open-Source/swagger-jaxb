@@ -29,13 +29,17 @@ import java.util.Map;
 public abstract class AbstractProcessStrategy implements ProcessStrategy {
 
 
-	protected final ProcessUtil processUtil;
+	protected final AbstractProcessUtil processUtil;
 
 	/**
 	 *
 	 */
 	public AbstractProcessStrategy() {
 		this.processUtil = ProcessUtil.getInstance();
+	}
+
+	public AbstractProcessStrategy(AbstractProcessUtil processUtil) {
+		this.processUtil = processUtil!=null ? processUtil : ProcessUtil.getInstance();
 	}
 
 	/*

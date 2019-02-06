@@ -16,19 +16,12 @@
 
 package be.redlab.jaxb.swagger.process;
 
-import be.redlab.jaxb.swagger.XJCHelper;
 import com.sun.codemodel.*;
 import com.sun.tools.xjc.model.CClassInfo;
-import com.sun.tools.xjc.model.CPropertyInfo;
 import com.sun.tools.xjc.outline.EnumConstantOutline;
 import com.sun.tools.xjc.outline.EnumOutline;
-import com.sun.tools.xjc.reader.xmlschema.bindinfo.BindInfo;
-import com.sun.xml.xsom.XSAnnotation;
-import com.sun.xml.xsom.XSComponent;
-import com.sun.xml.xsom.XSParticle;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.xml.bind.annotation.XmlElement;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,33 +29,22 @@ import java.util.List;
  * @author redlab
  *
  */
-public class ProcessUtil {
+public class ProcessUtil extends AbstractProcessUtil {
 	private static final String NOTES = "notes";
-	private static final String REQUIRED = "required";
 	private static final String DATA_TYPE = "dataType";
-	private static final String IS = "is";
 	private static final String VALUE = "value";
-	private static final String GET = "get";
 	private static final ProcessUtil myself = new ProcessUtil();
 
-	private ProcessUtil() {
+	protected ProcessUtil() {
 	}
 
 	public static ProcessUtil getInstance() {
 		return myself;
 	}
 
-	/**
-	 * @param mods
-	 * @return
-	 */
-	public boolean validFieldMods(final int mods) {
-		if ((mods & JMod.FINAL) != 0 || (mods & JMod.STATIC) != 0
-				|| (mods & JMod.ABSTRACT) != 0 || (mods & JMod.NATIVE) != 0 || (mods & JMod.TRANSIENT) != 0
-				|| (mods & JMod.VOLATILE) != 0)
-			return false;
-		return true;
-
+	@Override
+	public void addAnnotationForField(JDefinedClass implClass, CClassInfo targetClass, JFieldVar jFieldVar, Collection<EnumOutline> enums) {
+		addMethodAnnotationForField(implClass, targetClass, jFieldVar, enums);
 	}
 
 	/**
@@ -78,64 +60,9 @@ public class ProcessUtil {
 		}
 	}
 
-	/**
-	 * @param jFieldVar
-	 * @return
-	 */
-	public String getDefault(final JFieldVar jFieldVar) {
-		JAnnotationUse annotation = XJCHelper.getAnnotation(jFieldVar.annotations(), XmlElement.class);
-		if (null != annotation) {
-			return XJCHelper.getStringValueFromAnnotationMember(annotation, "defaultValue");
-		}
-		return null;
-	}
-
-	/**
-	 * @param jFieldVar
-	 * @return
-	 */
-	public boolean isRequired(final JFieldVar jFieldVar) {
-		return jFieldVar.type().isPrimitive()
-				|| isRequiredByAnnotation(XJCHelper.getAnnotation(jFieldVar.annotations(), XmlElement.class));
-	}
-
-	/**
-	 * @param annotation
-	 * @return
-	 */
-	public boolean isRequiredByAnnotation(final JAnnotationUse annotation) {
-		return null != annotation && "true".equalsIgnoreCase(XJCHelper.getStringValueFromAnnotationMember(annotation, REQUIRED));
-	}
-
-	/**
-	 * @param implClass
-	 * @param key
-	 * @return
-	 */
-	public JMethod getCorrespondingMethod(final JDefinedClass implClass, final String key) {
-		StringBuilder b = new StringBuilder(key.substring(0, 1).toUpperCase());
-		if (key.length() > 1) {
-			b.append(key.substring(1));
-		}
-		String get = GET + b.toString();
-		String is = IS + b.toString();
-		for (JMethod m : implClass.methods()) {
-			if (get.equals(m.name()) || is.equals(m.name())) {
-				return m;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * @param mods
-	 * @return
-	 */
-	public boolean validMethodMods(final int mods) {
-		if (((mods & JMod.PROTECTED) != 0 || (mods & JMod.PRIVATE) != 0 || (mods & JMod.FINAL) != 0 || (mods & JMod.STATIC) != 0
-				|| (mods & JMod.ABSTRACT) != 0 || (mods & JMod.NATIVE) != 0 || (mods & JMod.TRANSIENT) != 0 || (mods & JMod.VOLATILE) != 0))
-			return false;
-		return true;
+	@Override
+	public void addAnnotationForMethod(JDefinedClass o, CClassInfo t, JMethod m, boolean required, String defaultValue, Collection<EnumOutline> enums) {
+		addMethodAnnotation(o, t, m, required, defaultValue,enums);
 	}
 
 	/**
@@ -149,7 +76,7 @@ public class ProcessUtil {
      */
 	public void addMethodAnnotation(final JDefinedClass o, CClassInfo t, final JMethod m, final boolean required, final String defaultValue,
                                     final Collection<EnumOutline> enums) {
-		if (null == XJCHelper.getAnnotation(m.annotations(), ApiModelProperty.class)) {
+        if (isAnnotationNotPresent(m)) {
 			if (isValidMethod(m, GET)) {
 				internalAddMethodAnnotation(o, t, m, GET, required, defaultValue, enums);
 			} else if (isValidMethod(m, IS)) {
@@ -158,7 +85,7 @@ public class ProcessUtil {
 		}
 	}
 
-    /**
+	/**
      *
      * @param implClass
      * @param targetClass
@@ -187,30 +114,6 @@ public class ProcessUtil {
 			apiProperty.param(NOTES, defaultValue);
 		}
 	}
-
-	/**
-	 * Extract value from {@code <xs:annotation><xs:documentation>} for property if exists.
-	 *
-	 * @param targetClass the TargetClass
-	 * @param propertyName property name
-	 * @return value from {@code <xs:annotation><xs:documentation>} or <code>null</code> if
-	 * {@code <xs:annotation><xs:documentation>} does not exists.
-	 */
-    private String getDescription(CClassInfo targetClass, String propertyName) {
-        CPropertyInfo property = targetClass.getProperty(propertyName);
-        String description = propertyName;
-        XSComponent schemaComponent = property.getSchemaComponent();
-        if (schemaComponent instanceof XSParticle) {
-            XSAnnotation annotation = ((XSParticle) schemaComponent).getTerm().getAnnotation();
-            if (annotation != null) {
-                Object annotationObj = annotation.getAnnotation();
-                if (annotationObj instanceof BindInfo) {
-                    description = ((BindInfo) annotationObj).getDocumentation();
-                }
-            }
-        }
-        return description;
-    }
 
 	/**
 	 * @param apiProperty
@@ -258,17 +161,4 @@ public class ProcessUtil {
 		return b.toString();
 	}
 
-	/**
-	 * @param clazz
-	 * @param enums
-	 * @return
-	 */
-	public EnumOutline getKnownEnum(final String clazz, final Collection<EnumOutline> enums) {
-		for (EnumOutline eo : enums) {
-			if (eo.clazz.fullName().equals(clazz)) {
-				return eo;
-			}
-		}
-		return null;
-	}
 }
