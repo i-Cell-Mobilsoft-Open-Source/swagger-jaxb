@@ -1,0 +1,22 @@
+= swagger-jaxb
+
+//A README.adoc-ot az index.adoc-ból generáljuk preprocessor scripttel, ami kicseréli az include-okat a tényleges adoc szövegre
+//mivel a github egyelőre nem képes include-olni csak linkelni
+//script: https://github.com/asciidoctor/asciidoctor-extensions-lab/blob/master/scripts/asciidoc-coalescer.rb script
+//futtatás: ruby ~/Work/iCell/Util/asciidoctor/scripts/asciidoc-coalescer.rb -o README.adoc index.adoc
+
+It was created form `be.redlab.jaxb:swagger-jaxb`,
+since the original GitHub project seems abandoned, this fork is developed independently from its parents.
+
+Original project: https://github.com/redlab/swagger-jaxb
+
+The modification is based on the following fork:
+https://github.com/peneksglazami/swagger-jaxb
+
+== Summary
+This project is a refactored version of the forks mentioned above,
+its purpose was to make the project more extendable,
+namely allowing to override the generated annotations and their targets.
+
+== Original README
+include::README-original.adoc[leveloffset=2]
