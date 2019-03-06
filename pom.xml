@@ -1,11 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hu.icellmobilsoft.jaxb</groupId>
 	<artifactId>swagger-jaxb</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+		<java.version>1.8</java.version>
+		<project.scm.id>icell-github-server</project.scm.id>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -57,20 +59,26 @@
 		</dependency>
 	</dependencies>
 	<scm>
-		<connection>scm:git:git@github.com:redlab/swagger-jaxb.git</connection>
-		<developerConnection>scm:git:git@github.com:redlab/swagger-jaxb.git</developerConnection>
-		<url>git@github.com:redlab/swagger-jaxb.git</url>
+		<connection>scm:git:https://github.com/icellmobilsoft/swagger-jaxb.git</connection>
+		<developerConnection>scm:git:https://github.com/icellmobilsoft/swagger-jaxb.git</developerConnection>
+		<url>git@github.com:icellmobilsoft/swagger-jaxb.git</url>
+		<tag>HEAD</tag>
 	</scm>
 	<name>Swagger JAXB</name>
 	<description>XJC Plugin to add Swagger Annotations to your swagger generated JAXB classes, see github for info</description>
-	<url>https://github.com/redlab/swagger-jaxb</url>
+	<url>https://github.com/icellmobilsoft/swagger-jaxb</url>
+	<prerequisites>
+		<maven>3.3.0</maven>
+	</prerequisites>
+
 	<organization>
-		<url>http://www.redlab.be/</url>
-		<name>redlab</name>
+		<name>i-Cell Mobilsoft Zrt.</name>
+		<url>http://www.icell.hu</url>
 	</organization>
+	<inceptionYear>2019</inceptionYear>
 	<issueManagement>
 		<system>github issues</system>
-		<url>https://github.com/redlab/swagger-jaxb/issues</url>
+		<url>https://github.com/icellmobilsoft/swagger-jaxb/issues</url>
 	</issueManagement>
 	<licenses>
 		<license>
@@ -80,118 +88,329 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
+
+
+	<repositories>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+			<id>jboss-public-repository</id>
+			<name>JBoss Public</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>icell-public-repository</id>
+			<name>Internal Release Repository</name>
+			<url>https://nexus.icellmobilsoft.hu/repository/public/</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+			</snapshots>
+			<id>jboss-public-repository</id>
+			<name>JBoss Public</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</pluginRepository>
+		<pluginRepository>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>icell-public-repository</id>
+			<name>Internal Release Repository</name>
+			<url>https://nexus.icellmobilsoft.hu/repository/public/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>1.19</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>update-file-header</goal>
+							</goals>
+							<phase>process-sources</phase>
+						</execution>
+					</executions>
+					<configuration>
+						<verbose>false</verbose>
+						<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+						<licenseName>apache_v2</licenseName>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>1.8</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.3</version>
+					<configuration>
+						<scmCommentPrefix>maven release:</scmCommentPrefix>
+						<useReleaseProfile>true</useReleaseProfile>
+						<!-- 						<tagBase>https://svn.icellmobilsoft.hu:18080/svn/FRAMEWORK/tags/java/source/maven/fw</tagBase> -->
+						<!-- 						<branchBase>https://svn.icellmobilsoft.hu:18080/svn/FRAMEWORK/branches/java/source/maven/fw</branchBase> -->
+						<!-- http://stackoverflow.com/questions/15691985/maven-release-peer-not-authenticated -->
+						<!-- 						<arguments>-Dmaven.wagon.http.ssl.insecure=true -->
+						<!-- 							-Dmaven.wagon.http.ssl.allowall=true</arguments> -->
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.6.1</version>
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.20</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>2.20</version>
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+				<!-- usage: mvn clean deploy source:jar -->
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+					<configuration>
+						<uniqueVersion>false</uniqueVersion>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>buildnumber-maven-plugin</artifactId>
+					<version>1.4</version>
+					<executions>
+						<execution>
+							<phase>validate</phase>
+							<goals>
+								<goal>create</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<doCheck>false</doCheck>
+						<doUpdate>false</doUpdate>
+						<!-- <scmDirectory>${basedir}/..</scmDirectory> -->
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+					<configuration>
+						<archive>
+							<manifest>
+								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+								<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+							</manifest>
+							<manifestEntries>
+								<create-date>${maven.build.timestamp}</create-date>
+								<git-commit>${buildNumber}</git-commit>
+								<git-branch>${scmBranch}</git-branch>
+							</manifestEntries>
+						</archive>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.6</version>
+					<executions>
+						<execution>
+							<id>default-deploy</id>
+							<phase>site-deploy</phase>
+							<goals>
+								<goal>deploy</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${basedir}\target\site</outputDirectory>
+								<reportPlugins>
+									<reportPlugin>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-project-info-reports-plugin</artifactId>
+									</reportPlugin>
+								</reportPlugins>
+							</configuration>
+						</execution>
+					</executions>
+					<configuration>
+						<outputDirectory>${basedir}\target\site</outputDirectory>
+						<reportPlugins>
+							<reportPlugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-project-info-reports-plugin</artifactId>
+							</reportPlugin>
+						</reportPlugins>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.10.4</version>
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+						<failOnError>false</failOnError>
+					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.0.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar-no-fork</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!--This plugin's configuration is used to store Eclipse m2e settings
+                    only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-dependency-plugin
+										</artifactId>
+										<versionRange>
+											[2.1,)
+										</versionRange>
+										<goals>
+											<goal>copy</goal>
+											<goal>
+												unpack-dependencies
+											</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore/>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
-                <configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin><plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.8</version>
-				<configuration>
-					<destFile>${basedir}/target/jacoco.exec</destFile>
-					<dataFile>${basedir}/target/jacoco.exec</dataFile>
-				</configuration>
-				<executions>
-					<execution>
-						<id>jacoco-initialize</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>jacoco-site</id>
-						<phase>package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
+				<artifactId>maven-source-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
-	<profiles>
-		<profile>
-			<id>release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-source-plugin</artifactId>
-						<version>3.0.1</version>
-						<executions>
-							<execution>
-								<id>attach-sources</id>
-								<goals>
-									<goal>jar-no-fork</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.10.4</version>
-						<executions>
-							<execution>
-								<id>attach-javadocs</id>
-								<goals>
-									<goal>jar</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.5</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.sonatype.plugins</groupId>
-						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.7</version>
-						<extensions>true</extensions>
-						<configuration>
-							<serverId>ossrh</serverId>
-							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-							<autoReleaseAfterClose>false</autoReleaseAfterClose>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+
 	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
 		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			<uniqueVersion>false</uniqueVersion>
+			<id>icell-releases</id>
+			<name>i-Cell Releases</name>
+			<url>https://nexus.icellmobilsoft.hu/repository/releases/</url>
+			<layout>default</layout>
 		</repository>
+
+		<snapshotRepository>
+			<uniqueVersion>true</uniqueVersion>
+			<id>icell-snapshots</id>
+			<name>i-Cell Snapshots</name>
+			<url>https://nexus.icellmobilsoft.hu/repository/snapshots</url>
+			<layout>default</layout>
+		</snapshotRepository>
 	</distributionManagement>
-	<developers>
-		<developer>
-			<name>Balder Van Camp</name>
-			<url>https://www.redlab.be</url>
-			<id>redlab</id>
-			<email>dev@redlab.be</email>
-		</developer>
-	</developers>
 </project>
