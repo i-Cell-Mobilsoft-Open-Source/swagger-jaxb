@@ -88,80 +88,6 @@
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
-
-
-	<repositories>
-		<repository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-				<updatePolicy>never</updatePolicy>
-			</snapshots>
-			<id>jboss-public-repository</id>
-			<name>JBoss Public</name>
-			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-		</repository>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Central Repository</name>
-			<url>http://repo.maven.apache.org/maven2</url>
-		</repository>
-		<repository>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>icell-public-repository</id>
-			<name>Internal Release Repository</name>
-			<url>https://nexus.icellmobilsoft.hu/repository/public/</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-				<updatePolicy>never</updatePolicy>
-			</snapshots>
-			<id>jboss-public-repository</id>
-			<name>JBoss Public</name>
-			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
-		</pluginRepository>
-		<pluginRepository>
-			<releases>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>Central Repository</name>
-			<url>http://repo.maven.apache.org/maven2</url>
-		</pluginRepository>
-		<pluginRepository>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>icell-public-repository</id>
-			<name>Internal Release Repository</name>
-			<url>https://nexus.icellmobilsoft.hu/repository/public/</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -201,11 +127,6 @@
 					<configuration>
 						<scmCommentPrefix>maven release:</scmCommentPrefix>
 						<useReleaseProfile>true</useReleaseProfile>
-						<!-- 						<tagBase>https://svn.icellmobilsoft.hu:18080/svn/FRAMEWORK/tags/java/source/maven/fw</tagBase> -->
-						<!-- 						<branchBase>https://svn.icellmobilsoft.hu:18080/svn/FRAMEWORK/branches/java/source/maven/fw</branchBase> -->
-						<!-- http://stackoverflow.com/questions/15691985/maven-release-peer-not-authenticated -->
-						<!-- 						<arguments>-Dmaven.wagon.http.ssl.insecure=true -->
-						<!-- 							-Dmaven.wagon.http.ssl.allowall=true</arguments> -->
 					</configuration>
 				</plugin>
 				<plugin>
@@ -397,20 +318,13 @@
 	</build>
 
 	<distributionManagement>
-		<repository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>icell-releases</id>
-			<name>i-Cell Releases</name>
-			<url>https://nexus.icellmobilsoft.hu/repository/releases/</url>
-			<layout>default</layout>
-		</repository>
-
 		<snapshotRepository>
-			<uniqueVersion>true</uniqueVersion>
-			<id>icell-snapshots</id>
-			<name>i-Cell Snapshots</name>
-			<url>https://nexus.icellmobilsoft.hu/repository/snapshots</url>
-			<layout>default</layout>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
 	</distributionManagement>
 </project>
