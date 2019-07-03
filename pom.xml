@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hu.icellmobilsoft.jaxb</groupId>
 	<artifactId>swagger-jaxb</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -63,7 +63,7 @@
 		<connection>scm:git:git@github.com:icellmobilsoft/swagger-jaxb.git</connection>
 		<developerConnection>scm:git:git@github.com:icellmobilsoft/swagger-jaxb.git</developerConnection>
 		<url>https://github.com/icellmobilsoft/swagger-jaxb</url>
-		<tag>swagger-jaxb-1.0.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 	<name>Swagger JAXB</name>
 	<description>XJC Plugin to add Swagger Annotations to your swagger generated JAXB classes, see github for info</description>
