@@ -8,6 +8,7 @@
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 		<java.version>1.8</java.version>
 		<project.scm.id>icell-github-server</project.scm.id>
+		<nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -59,9 +60,9 @@
 		</dependency>
 	</dependencies>
 	<scm>
-		<connection>scm:git:https://github.com/icellmobilsoft/swagger-jaxb.git</connection>
-		<developerConnection>scm:git:https://github.com/icellmobilsoft/swagger-jaxb.git</developerConnection>
-		<url>git@github.com:icellmobilsoft/swagger-jaxb.git</url>
+		<connection>scm:git:git@github.com:icellmobilsoft/swagger-jaxb.git</connection>
+		<developerConnection>scm:git:git@github.com:icellmobilsoft/swagger-jaxb.git</developerConnection>
+		<url>https://github.com/icellmobilsoft/swagger-jaxb</url>
 		<tag>HEAD</tag>
 	</scm>
 	<name>Swagger JAXB</name>
@@ -73,7 +74,7 @@
 
 	<organization>
 		<name>i-Cell Mobilsoft Zrt.</name>
-		<url>http://www.icell.hu</url>
+		<url>https://www.icellmobilsoft.hu</url>
 	</organization>
 	<inceptionYear>2019</inceptionYear>
 	<issueManagement>
@@ -82,12 +83,20 @@
 	</issueManagement>
 	<licenses>
 		<license>
-			<name>Apache 2</name>
+			<name>The Apache Software License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
 			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
+	<developers>
+		<developer>
+			<id>icellmobilsoft.hu</id>
+			<name>icellmobilsoft.hu</name>
+			<organization>i-Cell Mobilsoft Zrt.</organization>
+			<organizationUrl>https://www.icellmobilsoft.hu</organizationUrl>
+		</developer>
+	</developers>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -126,7 +135,8 @@
 					<version>2.5.3</version>
 					<configuration>
 						<scmCommentPrefix>maven release:</scmCommentPrefix>
-						<useReleaseProfile>true</useReleaseProfile>
+						<useReleaseProfile>false</useReleaseProfile>
+						<releaseProfiles>release</releaseProfiles>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -217,24 +227,9 @@
 							</goals>
 							<configuration>
 								<outputDirectory>${basedir}\target\site</outputDirectory>
-								<reportPlugins>
-									<reportPlugin>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-project-info-reports-plugin</artifactId>
-									</reportPlugin>
-								</reportPlugins>
 							</configuration>
 						</execution>
 					</executions>
-					<configuration>
-						<outputDirectory>${basedir}\target\site</outputDirectory>
-						<reportPlugins>
-							<reportPlugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-project-info-reports-plugin</artifactId>
-							</reportPlugin>
-						</reportPlugins>
-					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -312,6 +307,10 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
 			</plugin>
 		</plugins>
@@ -327,4 +326,46 @@
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<gpgArguments>
+								<arg>--pinentry-mode</arg>
+								<arg>loopback</arg>
+							</gpgArguments>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>${nexus-staging-maven-plugin.version}</version>
+						<extensions>true</extensions>
+						<configuration>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<serverId>ossrh</serverId>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
+							<keepStagingRepositoryOnCloseRuleFailure>true</keepStagingRepositoryOnCloseRuleFailure>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
