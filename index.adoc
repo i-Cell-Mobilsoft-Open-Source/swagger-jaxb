@@ -18,5 +18,16 @@ This project is a refactored version of the forks mentioned above,
 its purpose was to make the project more extendable,
 namely allowing to override the generated annotations and their targets.
 
+=== Maven central
+This project is available in maven central as:
+[source, xml]
+----
+    <dependency>
+        <groupId>hu.icellmobilsoft.jaxb</groupId>
+        <artifactId>swagger-jaxb</artifactId>
+        <version>1.0.1</version>
+    </dependency>
+----
+
 == Original README
 include::README-original.adoc[leveloffset=2]
