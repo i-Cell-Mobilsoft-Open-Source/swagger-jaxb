@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,10 +35,14 @@
 
 package be.redlab.jaxb.swagger;
 
-import be.redlab.jaxb.swagger.process.FieldProcessStrategy;
-import be.redlab.jaxb.swagger.process.NoProcessStrategy;
-import be.redlab.jaxb.swagger.process.PropertyProcessStrategy;
-import be.redlab.jaxb.swagger.process.PublicMemberProcessStrategy;
+import java.util.Collection;
+
+import javax.xml.bind.annotation.XmlAccessType;
+
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+
 import com.sun.codemodel.JAnnotationUse;
 import com.sun.codemodel.JDefinedClass;
 import com.sun.tools.xjc.Options;
@@ -48,13 +52,8 @@ import com.sun.tools.xjc.outline.EnumOutline;
 import com.sun.tools.xjc.outline.Outline;
 import com.sun.tools.xjc.reader.xmlschema.bindinfo.BindInfo;
 import com.sun.xml.xsom.XSAnnotation;
-import io.swagger.annotations.ApiModel;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import java.util.Collection;
+import io.swagger.annotations.ApiModel;
 
 /**
  * The SwaggerAnnotationsJaxbPlugin adds Swaggers {@link io.swagger.annotations.ApiModel} and {@link io.swagger.annotations.ApiModelProperty} to JAXB Generated classes.
@@ -113,6 +112,7 @@ public class SwaggerAnnotationsJaxbPlugin extends Plugin {
 	public boolean run(final Outline outline, final Options opt, final ErrorHandler errorHandler) throws SAXException {
 		Collection<? extends ClassOutline> classes = outline.getClasses();
 		Collection<EnumOutline> enums = outline.getEnums();
+		processEnums(enums);
 		for (ClassOutline o : classes) {
 			JDefinedClass implClass = o.implClass;
 			if (null != implClass && implClass.isClass() && !implClass.isAbstract() && !implClass.isInterface()
@@ -131,6 +131,15 @@ public class SwaggerAnnotationsJaxbPlugin extends Plugin {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Possible processing of EnumOutlines.
+	 *
+	 * @param enums
+	 */
+	protected void processEnums(Collection<EnumOutline> enums) {
+		//Possible processing of EnumOutlines.
 	}
 
 	/**
