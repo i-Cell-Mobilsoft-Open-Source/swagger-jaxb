@@ -25,7 +25,7 @@ This project is available in maven central as:
     <dependency>
         <groupId>hu.icellmobilsoft.jaxb</groupId>
         <artifactId>swagger-jaxb</artifactId>
-        <version>1.0.1</version>
+        <version>1.1.0</version>
     </dependency>
 ----
 
